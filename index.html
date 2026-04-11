@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Inclusão</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:linear-gradient(135deg,#4a90e2,#6fb1fc);display:flex;justify-content:center;align-items:center;min-height:100vh;}
+.container{background:#fff;padding:20px;border-radius:20px;width:95%;max-width:420px;box-shadow:0 10px 30px rgba(0,0,0,0.2);} 
+h1{text-align:center;margin-bottom:10px;}
+input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ccc;}
+button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;background:#2c3e50;color:#fff;font-size:16px;}
+.link{display:block;margin-top:10px;text-align:center;color:#4a90e2;cursor:pointer;}
+.hidden{display:none;}
+.info{font-size:14px;line-height:1.6;max-height:300px;overflow:auto;}
+.badge{background:#4a90e2;color:#fff;padding:5px 10px;border-radius:20px;font-size:12px;display:inline-block;margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<div class="container" id="home">
+<h1>App Inclusão</h1>
+<span class="badge">Versão App</span>
+<button onclick="show('login')">Entrar</button>
+<button onclick="show('cadastro')">Cadastrar</button>
+</div>
+
+<div class="container hidden" id="login">
+<h1>Login</h1>
+<input id="loginTel" placeholder="Telefone">
+<input id="loginSenha" type="password" placeholder="Senha">
+<button onclick="login()">Entrar</button>
+<span class="link" onclick="show('home')">Voltar</span>
+</div>
+
+<div class="container hidden" id="cadastro">
+<h1>Cadastro</h1>
+<input id="nome" placeholder="Nome">
+<input id="tel" placeholder="Telefone">
+<input id="senha" type="password" placeholder="Senha">
+<button onclick="cadastrar()">Cadastrar</button>
+<span class="link" onclick="show('home')">Voltar</span>
+</div>
+
+<div class="container hidden" id="painel">
+<h1>Painel do Usuário</h1>
+<div class="info">
+<img src="https://cdn.pixabay.com/photo/2017/01/31/21/23/children-2027364_1280.png" width="100%" style="border-radius:10px;margin-bottom:10px;">
+<p><b>Autismo em crianças:</b> dificuldades sociais, comunicação e comportamentos repetitivos.</p>
+
+<img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/adult-1299990_1280.png" width="100%" style="border-radius:10px;margin:10px 0;">
+<p><b>Autismo em adultos:</b> dificuldades sociais, foco intenso e necessidade de rotina.</p>
+
+<h3>Dicas importantes</h3>
+<p>✔ Rotina organizada ajuda muito</p>
+<p>✔ Evitar ambientes com muito barulho</p>
+<p>✔ Ter paciência e apoio constante</p>
+
+<h3>TDAH</h3>
+<p>Desatenção, hiperatividade e impulsividade.</p>
+
+</div>
+<button onclick="logout()">Sair</button>
+</div>
+
+<script>
+function show(id){
+ document.querySelectorAll('.container').forEach(e=>e.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+}
+
+function cadastrar(){
+ let user={nome:nome.value,tel:tel.value,senha:senha.value};
+ localStorage.setItem('user',JSON.stringify(user));
+ alert('Cadastro realizado');
+ show('login');
+}
+
+function login(){
+ let user=JSON.parse(localStorage.getItem('user'));
+ if(user && user.tel==loginTel.value && user.senha==loginSenha.value){
+  show('painel');
+ }else alert('Erro no login');
+}
+
+function logout(){show('home');}
+
+if('serviceWorker' in navigator){
+ navigator.serviceWorker.register('sw.js');
+}
+</script>
+
+</body>
+</html>
