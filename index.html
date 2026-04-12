@@ -1,32 +1,64 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>App Inclusão</title>
-
-<link rel="manifest" href="manifest.json">
+<title>Inclusão - Autismo e TDAH</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:linear-gradient(135deg,#4a90e2,#6fb1fc);display:flex;justify-content:center;align-items:center;min-height:100vh;}
-.container{background:#fff;padding:20px;border-radius:20px;width:95%;max-width:420px;box-shadow:0 10px 30px rgba(0,0,0,0.2);} 
+.container{background:#fff;padding:20px;border-radius:20px;width:95%;max-width:420px;box-shadow:0 10px 30px rgba(0,0,0,0.2);animation:fade 0.4s ease;} 
 h1{text-align:center;margin-bottom:10px;}
+h2{text-align:center;font-size:14px;color:#666;margin-bottom:10px;}
 input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ccc;}
-button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;background:#2c3e50;color:#fff;font-size:16px;}
+button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;background:#2c3e50;color:#fff;font-size:16px;cursor:pointer;}
+button:hover{background:#1a252f;}
 .link{display:block;margin-top:10px;text-align:center;color:#4a90e2;cursor:pointer;}
 .hidden{display:none;}
-.info{font-size:14px;line-height:1.6;max-height:300px;overflow:auto;}
-.badge{background:#4a90e2;color:#fff;padding:5px 10px;border-radius:20px;font-size:12px;display:inline-block;margin-bottom:10px;}
+.info{font-size:14px;line-height:1.6;max-height:350px;overflow:auto;}
+h3{margin-top:10px;}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(20px);} 
+to{opacity:1;transform:translateY(0);} }
+
+.success{
+ position:fixed;
+ top:50%;left:50%;
+ transform:translate(-50%,-50%);
+ background:#2ecc71;
+ color:#fff;
+ padding:20px;
+ border-radius:10px;
+ display:none;
+ animation:pop 0.5s ease;
+}
+
+@keyframes pop{
+from{transform:scale(0);} 
+to{transform:scale(1);} }
+
+.footer{
+ text-align:center;
+ margin-top:10px;
+ font-size:12px;
+ color:#888;
+ animation:fade 2s infinite alternate;
+}
 </style>
 </head>
 <body>
 
+<div class="success" id="successMsg">Cadastro realizado com sucesso! 🎉</div>
+
 <div class="container" id="home">
-<h1>App Inclusão</h1>
-<span class="badge">Versão App</span>
+<h1>Inclusão</h1>
+<h2>Informação e apoio sobre Autismo e TDAH</h2>
 <button onclick="show('login')">Entrar</button>
 <button onclick="show('cadastro')">Cadastrar</button>
+<div class="footer">Cuidar, entender e incluir 💙</div>
 </div>
 
 <div class="container hidden" id="login">
@@ -47,24 +79,47 @@ button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;ba
 </div>
 
 <div class="container hidden" id="painel">
-<h1>Painel do Usuário</h1>
+<h1>Painel</h1>
 <div class="info">
-<img src="https://cdn.pixabay.com/photo/2017/01/31/21/23/children-2027364_1280.png" width="100%" style="border-radius:10px;margin-bottom:10px;">
-<p><b>Autismo em crianças:</b> dificuldades sociais, comunicação e comportamentos repetitivos.</p>
 
-<img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/adult-1299990_1280.png" width="100%" style="border-radius:10px;margin:10px 0;">
-<p><b>Autismo em adultos:</b> dificuldades sociais, foco intenso e necessidade de rotina.</p>
+<h3>📘 Autismo em Crianças</h3>
+<p>Dificuldade na comunicação, pouco contato visual e necessidade de rotina.</p>
 
-<h3>Dicas importantes</h3>
-<p>✔ Rotina organizada ajuda muito</p>
-<p>✔ Evitar ambientes com muito barulho</p>
-<p>✔ Ter paciência e apoio constante</p>
+<h3>📘 Autismo em Adultos</h3>
+<p>Dificuldade social, foco intenso e preferência por ambientes tranquilos.</p>
 
-<h3>TDAH</h3>
-<p>Desatenção, hiperatividade e impulsividade.</p>
+<h3>⚡ TDAH em Crianças</h3>
+<p>Desatenção, agitação e impulsividade.</p>
+
+<h3>⚡ TDAH em Adultos</h3>
+<p>Falta de foco, organização e controle emocional.</p>
+
+<h3>🧠 Como lidar com crises</h3>
+<p>✔ Manter calma<br>✔ Reduzir estímulos<br>✔ Falar com tranquilidade</p>
+
+<h3>👨‍👩‍👧 Dicas para pais</h3>
+<p>✔ Rotina<br>✔ Paciência<br>✔ Apoio profissional</p>
 
 </div>
+<button onclick="show('pagina2')">Mais Informações</button>
 <button onclick="logout()">Sair</button>
+</div>
+
+<div class="container hidden" id="pagina2">
+<h1>Mais Informações</h1>
+<div class="info">
+
+<h3>Sinais de Autismo</h3>
+<p>✔ Não responde ao nome<br>✔ Pouco contato visual<br>✔ Atraso na fala</p>
+
+<h3>Rotina ideal</h3>
+<p>✔ Dormir no mesmo horário<br>✔ Alimentação organizada<br>✔ Tempo para brincar</p>
+
+<h3>Diferença Autismo x TDAH</h3>
+<p>Autismo: social<br>TDAH: atenção</p>
+
+</div>
+<button onclick="show('painel')">Voltar</button>
 </div>
 
 <script>
@@ -76,22 +131,23 @@ function show(id){
 function cadastrar(){
  let user={nome:nome.value,tel:tel.value,senha:senha.value};
  localStorage.setItem('user',JSON.stringify(user));
- alert('Cadastro realizado');
+ document.getElementById('successMsg').style.display='block';
+ setTimeout(()=>{
+ document.getElementById('successMsg').style.display='none';
  show('login');
+ },2000);
 }
 
 function login(){
  let user=JSON.parse(localStorage.getItem('user'));
  if(user && user.tel==loginTel.value && user.senha==loginSenha.value){
   show('painel');
- }else alert('Erro no login');
+ }else{
+  alert('Dados incorretos');
+ }
 }
 
 function logout(){show('home');}
-
-if('serviceWorker' in navigator){
- navigator.serviceWorker.register('sw.js');
-}
 </script>
 
 </body>
