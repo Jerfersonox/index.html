@@ -20,33 +20,17 @@ button:hover{background:#1a252f;}
 .info{font-size:14px;line-height:1.6;max-height:350px;overflow:auto;}
 h3{margin-top:10px;}
 
-@keyframes fade{
-from{opacity:0;transform:translateY(20px);} 
-to{opacity:1;transform:translateY(0);} }
+@keyframes fade{from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);}}
 
-.success{
- position:fixed;
- top:50%;left:50%;
- transform:translate(-50%,-50%);
- background:#2ecc71;
- color:#fff;
- padding:20px;
- border-radius:10px;
- display:none;
- animation:pop 0.5s ease;
-}
+.success{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2ecc71;color:#fff;padding:20px;border-radius:10px;display:none;animation:pop 0.5s ease;}
+@keyframes pop{from{transform:scale(0);} to{transform:scale(1);}}
 
-@keyframes pop{
-from{transform:scale(0);} 
-to{transform:scale(1);} }
+.dark{background:#121212;color:#fff;}
 
-.footer{
- text-align:center;
- margin-top:10px;
- font-size:12px;
- color:#888;
- animation:fade 2s infinite alternate;
-}
+.game-box{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;}
+.game-box div{background:#eee;padding:20px;text-align:center;font-size:20px;border-radius:10px;cursor:pointer;}
+
+.footer{text-align:center;margin-top:10px;font-size:12px;color:#888;animation:fade 2s infinite alternate;}
 </style>
 </head>
 <body>
@@ -55,7 +39,7 @@ to{transform:scale(1);} }
 
 <div class="container" id="home">
 <h1>Inclusão</h1>
-<h2>Informação e apoio sobre Autismo e TDAH</h2>
+<h2>Autismo e TDAH</h2>
 <button onclick="show('login')">Entrar</button>
 <button onclick="show('cadastro')">Cadastrar</button>
 <div class="footer">Cuidar, entender e incluir 💙</div>
@@ -80,46 +64,32 @@ to{transform:scale(1);} }
 
 <div class="container hidden" id="painel">
 <h1>Painel</h1>
+<p id="boasVindas"></p>
+
 <div class="info">
+<h3>Autismo e TDAH</h3>
+<p>Informações e apoio para crianças e adultos.</p>
 
-<h3>📘 Autismo em Crianças</h3>
-<p>Dificuldade na comunicação, pouco contato visual e necessidade de rotina.</p>
-
-<h3>📘 Autismo em Adultos</h3>
-<p>Dificuldade social, foco intenso e preferência por ambientes tranquilos.</p>
-
-<h3>⚡ TDAH em Crianças</h3>
-<p>Desatenção, agitação e impulsividade.</p>
-
-<h3>⚡ TDAH em Adultos</h3>
-<p>Falta de foco, organização e controle emocional.</p>
-
-<h3>🧠 Como lidar com crises</h3>
-<p>✔ Manter calma<br>✔ Reduzir estímulos<br>✔ Falar com tranquilidade</p>
-
-<h3>👨‍👩‍👧 Dicas para pais</h3>
+<h3>Dicas</h3>
 <p>✔ Rotina<br>✔ Paciência<br>✔ Apoio profissional</p>
 
+<h3>Cadastrar Criança</h3>
+<input id="criancaNome" placeholder="Nome">
+<input id="idade" placeholder="Idade">
+<button onclick="salvarCrianca()">Salvar</button>
+<div id="listaCriancas"></div>
+
+<h3>🎮 Jogo da Memória</h3>
+<div class="game-box" id="jogoMemoria"></div>
+
+<h3>🎯 Jogo de Toque</h3>
+<p id="pontos">Pontos: 0</p>
+<button onclick="ganharPonto()">Clique aqui!</button>
+
 </div>
-<button onclick="show('pagina2')">Mais Informações</button>
+
+<button onclick="modoEscuro()">Modo Escuro</button>
 <button onclick="logout()">Sair</button>
-</div>
-
-<div class="container hidden" id="pagina2">
-<h1>Mais Informações</h1>
-<div class="info">
-
-<h3>Sinais de Autismo</h3>
-<p>✔ Não responde ao nome<br>✔ Pouco contato visual<br>✔ Atraso na fala</p>
-
-<h3>Rotina ideal</h3>
-<p>✔ Dormir no mesmo horário<br>✔ Alimentação organizada<br>✔ Tempo para brincar</p>
-
-<h3>Diferença Autismo x TDAH</h3>
-<p>Autismo: social<br>TDAH: atenção</p>
-
-</div>
-<button onclick="show('painel')">Voltar</button>
 </div>
 
 <script>
@@ -141,13 +111,62 @@ function cadastrar(){
 function login(){
  let user=JSON.parse(localStorage.getItem('user'));
  if(user && user.tel==loginTel.value && user.senha==loginSenha.value){
+  document.getElementById('boasVindas').innerText = "Bem-vindo, " + user.nome;
   show('painel');
- }else{
-  alert('Dados incorretos');
- }
+ }else alert('Erro no login');
 }
 
 function logout(){show('home');}
+
+function modoEscuro(){document.body.classList.toggle('dark');}
+
+function salvarCrianca(){
+ let nome = criancaNome.value;
+ let idade = idade.value;
+ let lista = JSON.parse(localStorage.getItem('criancas')) || [];
+ lista.push({nome, idade});
+ localStorage.setItem('criancas', JSON.stringify(lista));
+ mostrarCriancas();
+}
+
+function mostrarCriancas(){
+ let lista = JSON.parse(localStorage.getItem('criancas')) || [];
+ let html="";
+ lista.forEach(c=>{html += `<p>${c.nome} - ${c.idade} anos</p>`});
+ listaCriancas.innerHTML = html;
+}
+mostrarCriancas();
+
+// jogo memória simples
+let emojis=['😀','🐶','🚗','🍎','⚽','🎵'];
+let jogo=[...emojis,...emojis].sort(()=>0.5-Math.random());
+let aberto=[];
+
+jogo.forEach((e,i)=>{
+ let div=document.createElement('div');
+ div.innerHTML='?';
+ div.onclick=()=>{
+  div.innerHTML=e;
+  aberto.push({div,e});
+  if(aberto.length==2){
+   if(aberto[0].e!==aberto[1].e){
+    setTimeout(()=>{
+     aberto[0].div.innerHTML='?';
+     aberto[1].div.innerHTML='?';
+     aberto=[];
+    },500);
+   }else aberto=[];
+  }
+ };
+ jogoMemoria.appendChild(div);
+});
+
+// jogo clique
+let pontos=0;
+function ganharPonto(){
+ pontos++;
+ document.getElementById('pontos').innerText='Pontos: '+pontos;
+}
 </script>
 
 </body>
