@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -17,8 +16,6 @@ button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;ba
 .link{text-align:center;color:#4a90e2;display:block;margin-top:10px;cursor:pointer;}
 .hidden{display:none;}
 .info{max-height:300px;overflow:auto;font-size:14px;}
-.game-box{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;}
-.game-box div{background:#eee;padding:20px;text-align:center;border-radius:10px;cursor:pointer;}
 .success{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2ecc71;color:#fff;padding:20px;border-radius:10px;display:none;}
 .dark{background:#121212;color:#fff;}
 </style>
@@ -58,8 +55,23 @@ button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;ba
 
 <div class="info">
 
-<h3>Autismo e TDAH</h3>
-<p>Informações e apoio para crianças e adultos.</p>
+<h3>Autismo em Crianças</h3>
+<p>Dificuldade na comunicação, pouco contato visual e necessidade de rotina.</p>
+
+<h3>Autismo em Adultos</h3>
+<p>Dificuldade social, foco intenso e preferência por ambientes tranquilos.</p>
+
+<h3>TDAH em Crianças</h3>
+<p>Desatenção, agitação e impulsividade.</p>
+
+<h3>TDAH em Adultos</h3>
+<p>Dificuldade de foco, organização e controle emocional.</p>
+
+<h3>Como lidar com crises</h3>
+<p>✔ Manter calma<br>✔ Reduzir estímulos<br>✔ Falar com tranquilidade</p>
+
+<h3>Dicas para pais</h3>
+<p>✔ Criar rotina<br>✔ Ter paciência<br>✔ Procurar apoio profissional</p>
 
 <h3>Cadastrar Criança</h3>
 <input id="criancaNome" placeholder="Nome">
@@ -67,13 +79,6 @@ button{width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;ba
 <button onclick="salvarCrianca()">Salvar</button>
 
 <div id="listaCriancas"></div>
-
-<h3>🎮 Jogo da Memória</h3>
-<div class="game-box" id="jogoMemoria"></div>
-
-<h3>🎯 Jogo de Clique</h3>
-<p id="pontos">Pontos: 0</p>
-<button onclick="ganharPonto()">Clique aqui</button>
 
 </div>
 
@@ -149,44 +154,6 @@ function mostrarCriancas(){
 }
 
 mostrarCriancas();
-
-// JOGO MEMÓRIA
-let jogoMemoria=document.getElementById('jogoMemoria');
-let emojis=['😀','🐶','🚗','🍎','⚽','🎵'];
-let jogo=[...emojis,...emojis].sort(()=>0.5-Math.random());
-let aberto=[];
-
-jogo.forEach(e=>{
- let div=document.createElement('div');
- div.innerHTML='?';
-
- div.onclick=()=>{
-  div.innerHTML=e;
-  aberto.push({div,e});
-
-  if(aberto.length==2){
-   if(aberto[0].e!==aberto[1].e){
-    setTimeout(()=>{
-     aberto[0].div.innerHTML='?';
-     aberto[1].div.innerHTML='?';
-     aberto=[];
-    },500);
-   }else{
-    aberto=[];
-   }
-  }
- };
-
- jogoMemoria.appendChild(div);
-});
-
-// JOGO CLIQUE
-let pontos=0;
-
-function ganharPonto(){
- pontos++;
- document.getElementById('pontos').innerText="Pontos: "+pontos;
-}
 
 </script>
 
