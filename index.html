@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -9,33 +10,88 @@ body{
  margin:0;
  font-family:Arial;
  text-align:center;
- background:linear-gradient(135deg,#6a11cb,#2575fc);
+ background:linear-gradient(135deg,#667eea,#764ba2);
  color:white;
+ overflow-x:hidden;
 }
 
-input,button{
- padding:10px;
- margin:5px;
- border-radius:10px;
- border:none;
+/* SPLASH */
+#splash{
+ position:fixed;
+ width:100%;
+ height:100%;
+ background:#764ba2;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ flex-direction:column;
+ z-index:999;
+ animation:fadeOut 1s ease 2.5s forwards;
 }
 
+@keyframes fadeOut{
+ to{opacity:0; visibility:hidden;}
+}
+
+#logo{
+ font-size:35px;
+ animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+ 0%{transform:scale(1);}
+ 50%{transform:scale(1.2);}
+ 100%{transform:scale(1);}
+}
+
+/* BOTÕES */
 button{
+ padding:12px;
+ margin:6px;
+ border:none;
+ border-radius:12px;
  cursor:pointer;
+ transition:0.3s;
+ font-weight:bold;
 }
 
-.hidden{
- display:none;
+button:hover{
+ transform:scale(1.1);
 }
 
-.card{
- background:white;
- color:#333;
- padding:15px;
- border-radius:15px;
- margin:10px;
- display:block;
- text-decoration:none;
+/* TELAS */
+.hidden{display:none;}
+
+.fade{
+ animation:fadeIn 0.8s;
+}
+
+@keyframes fadeIn{
+ from{opacity:0;}
+ to{opacity:1;}
+}
+
+/* JOGO */
+#game button{
+ width:60px;
+ height:60px;
+ font-size:20px;
+}
+
+/* VITÓRIA */
+#win{
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ background:rgba(0,0,0,0.8);
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ flex-direction:column;
+ font-size:30px;
+ animation:fadeIn 1s;
 }
 
 </style>
@@ -43,21 +99,33 @@ button{
 
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-<h1>🔐 Login</h1>
+<!-- SOM -->
+<audio id="clickSound">
+<source src="https://www.soundjay.com/buttons/sounds/button-16.mp3">
+</audio>
 
+<audio autoplay loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<!-- SPLASH -->
+<div id="splash">
+<div id="logo">🧠 Mundo Inclusivo</div>
+<p>Carregando...</p>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="fade">
+<h1>🔐 Login</h1>
 <input id="user" placeholder="Usuário"><br>
 <input id="pass" type="password" placeholder="Senha"><br>
-
 <button onclick="login()">Entrar</button>
 <button onclick="cadastro()">Cadastrar</button>
-
 <p id="msg"></p>
 </div>
 
 <!-- MENU -->
-<div id="menu" class="hidden">
+<div id="menu" class="hidden fade">
 <h1>🧠 Mundo Inclusivo</h1>
 
 <button onclick="abrir('memoria')">🧩 Memória</button>
@@ -70,8 +138,8 @@ button{
 <button onclick="logout()">Sair</button>
 </div>
 
-<!-- JOGO MEMORIA -->
-<div id="memoria" class="hidden">
+<!-- MEMORIA -->
+<div id="memoria" class="hidden fade">
 <h2>🧩 Memória</h2>
 <p id="score">0</p>
 <div id="game"></div>
@@ -79,7 +147,7 @@ button{
 </div>
 
 <!-- CORES -->
-<div id="cores" class="hidden">
+<div id="cores" class="hidden fade">
 <h2>🎨 Cores</h2>
 <button onclick="ver('red')" style="background:red">Vermelho</button>
 <button onclick="ver('blue')" style="background:blue">Azul</button>
@@ -88,7 +156,7 @@ button{
 </div>
 
 <!-- ATENÇÃO -->
-<div id="atencao" class="hidden">
+<div id="atencao" class="hidden fade">
 <h2>🎯 Atenção</h2>
 <button onclick="ganhar()">CLIQUE RÁPIDO</button>
 <p id="msgAt"></p>
@@ -96,34 +164,44 @@ button{
 </div>
 
 <!-- RANKING -->
-<div id="ranking" class="hidden">
+<div id="ranking" class="hidden fade">
 <h2>🏆 Ranking</h2>
 <ul id="lista"></ul>
 <button onclick="voltar()">⬅ Voltar</button>
 </div>
 
 <!-- DICAS -->
-<div id="dicas" class="hidden">
+<div id="dicas" class="hidden fade">
 <h2>📘 Autismo e TDAH</h2>
-
-<p><b>Sinais:</b> dificuldade social, pouco contato visual</p>
-<p><b>Crises:</b> manter calma e ambiente tranquilo</p>
-<p><b>Rotina:</b> ajuda na organização da criança</p>
-<p><b>Dicas:</b> paciência, amor e acompanhamento</p>
-
+<p>Sinais: dificuldade social e comunicação</p>
+<p>Crises: manter ambiente calmo</p>
+<p>Rotina: ajuda muito no desenvolvimento</p>
+<p>Dicas: paciência e apoio</p>
 <button onclick="voltar()">⬅ Voltar</button>
+</div>
+
+<!-- VITÓRIA -->
+<div id="win" class="hidden">
+🎉 Parabéns!<br>
+<button onclick="fecharWin()">Continuar</button>
 </div>
 
 <script>
 
-// LOGIN
+let clickSound = document.getElementById("clickSound");
+
+// splash
+setTimeout(()=>{
+ splash.style.display="none";
+},3000);
+
+// login
 function cadastro(){
  let u=user.value;
  let p=pass.value;
-
- if(u && p){
+ if(u&&p){
   localStorage.setItem("user_"+u,p);
-  msg.innerText="✅ Cadastrado";
+  msg.innerText="Cadastrado!";
  }
 }
 
@@ -135,7 +213,7 @@ function login(){
   localStorage.setItem("logado",u);
   mostrarMenu();
  }else{
-  msg.innerText="❌ Erro";
+  msg.innerText="Erro";
  }
 }
 
@@ -149,8 +227,10 @@ function mostrarMenu(){
  menu.classList.remove("hidden");
 }
 
-// TELAS
+// navegação
 function abrir(id){
+ clickSound.play();
+
  document.querySelectorAll("body > div").forEach(d=>d.classList.add("hidden"));
  document.getElementById(id).classList.remove("hidden");
 
@@ -159,16 +239,17 @@ function abrir(id){
 }
 
 function voltar(){
+ clickSound.play();
  document.querySelectorAll("body > div").forEach(d=>d.classList.add("hidden"));
  menu.classList.remove("hidden");
 }
 
-// MEMORIA
+// memória
 function iniciarMemoria(){
  game.innerHTML="";
  score.innerText=0;
 
- let usuario=localStorage.getItem("logado");
+ let user=localStorage.getItem("logado");
  let emojis=["🐶","🐱","🍎","🍌"];
  let cards=[...emojis,...emojis].sort(()=>0.5-Math.random());
 
@@ -179,9 +260,12 @@ function iniciarMemoria(){
   b.innerText="?";
 
   b.onclick=()=>{
+   clickSound.play();
+
    if(lock||b.innerText!=="?") return;
 
    b.innerText=e;
+   b.style.transform="scale(1.2)";
 
    if(!first){
     first=b;
@@ -192,23 +276,18 @@ function iniciarMemoria(){
     if(first.innerText===second.innerText){
      pontos+=10;
      score.innerText=pontos;
-
-     first=null;
-     second=null;
-     lock=false;
+     first=null; second=null; lock=false;
 
      if(pontos===40){
-      salvar(usuario,pontos);
-      alert("🎉 venceu!");
+      salvar(user,pontos);
+      win.classList.remove("hidden");
      }
 
     }else{
      setTimeout(()=>{
       first.innerText="?";
       second.innerText="?";
-      first=null;
-      second=null;
-      lock=false;
+      first=null; second=null; lock=false;
      },600);
     }
    }
@@ -218,34 +297,38 @@ function iniciarMemoria(){
  });
 }
 
-function salvar(user,p){
- let atual=localStorage.getItem("score_"+user)||0;
+function salvar(u,p){
+ let atual=localStorage.getItem("score_"+u)||0;
  if(p>atual){
-  localStorage.setItem("score_"+user,p);
+  localStorage.setItem("score_"+u,p);
  }
 }
 
-// CORES
+function fecharWin(){
+ win.classList.add("hidden");
+ voltar();
+}
+
+// cores
 function ver(c){
- msgCor.innerText = c==="red" ? "✅ Acertou" : "❌ Errou";
+ clickSound.play();
+ msgCor.innerText = c==="red" ? "Acertou!" : "Errou!";
 }
 
-// ATENÇÃO
+// atenção
 function ganhar(){
- msgAt.innerText="🔥 Muito bem!";
+ clickSound.play();
+ msgAt.innerText="Muito bem!";
 }
 
-// RANKING
+// ranking
 function carregarRanking(){
  lista.innerHTML="";
-
  for(let i=0;i<localStorage.length;i++){
   let k=localStorage.key(i);
-
   if(k.startsWith("score_")){
    let user=k.replace("score_","");
    let score=localStorage.getItem(k);
-
    let li=document.createElement("li");
    li.innerText=user+" - "+score;
    lista.appendChild(li);
@@ -253,7 +336,7 @@ function carregarRanking(){
  }
 }
 
-// AUTO LOGIN
+// auto login
 if(localStorage.getItem("logado")){
  mostrarMenu();
 }
