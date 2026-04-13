@@ -41,8 +41,6 @@ input{
  border:none;
 }
 
-.hidden{display:none;}
-
 /* MODO CALMO */
 .calmo{
  background:#a8dadc !important;
@@ -68,12 +66,22 @@ input{
  width:100%;
  height:100%;
  background:rgba(0,0,0,0.8);
- display:flex;
+ display:none;
  justify-content:center;
  align-items:center;
  flex-direction:column;
  font-size:26px;
 }
+
+#win button{
+ padding:15px 30px;
+ border-radius:20px;
+ border:none;
+ font-size:20px;
+}
+
+.hidden{display:none;}
+
 </style>
 </head>
 
@@ -96,10 +104,11 @@ input{
 <div id="menu" class="container hidden">
 <h2>🧠 Mundo Inclusivo</h2>
 
-<button onclick="abrirJogo(4)">🟢 Fácil</button>
-<button onclick="abrirJogo(6)">🟡 Médio</button>
-<button onclick="abrirJogo(8)">🔴 Difícil</button>
+<button onclick="abrirJogo(4)">🟢 Jogo Fácil</button>
+<button onclick="abrirJogo(6)">🟡 Jogo Médio</button>
+<button onclick="abrirJogo(8)">🔴 Jogo Difícil</button>
 
+<button onclick="abrirInfo()">📘 Informações</button>
 <button onclick="modoCalmo()">🌿 Modo Calmo</button>
 
 <button onclick="logout()">Sair</button>
@@ -107,14 +116,51 @@ input{
 
 <!-- JOGO -->
 <div id="memoria" class="container hidden">
-<h2>🧩 Memória</h2>
+<h2>🧩 Jogo da Memória</h2>
 <p>Pontos: <span id="score">0</span></p>
 <div id="game"></div>
 <button onclick="voltar()">⬅ Voltar</button>
 </div>
 
+<!-- INFORMAÇÕES -->
+<div id="info" class="container hidden">
+
+<h2>📘 Autismo e TDAH</h2>
+
+<h3>👶 Crianças (0 a 3 anos)</h3>
+<p>Pouco contato visual, atraso na fala, não responde ao nome.</p>
+
+<h3>🧒 Crianças (4 a 10 anos)</h3>
+<p>Dificuldade social, irritação, hiperatividade (TDAH), repetição de ações.</p>
+
+<h3>👦 Adolescentes</h3>
+<p>Dificuldade emocional, ansiedade, problemas de atenção.</p>
+
+<h3>👨 Adultos</h3>
+<p>Dificuldade em socializar, organização e foco.</p>
+
+<h3>⚠️ Diferença Autismo x TDAH</h3>
+<p>Autismo: comunicação e interação.</p>
+<p>TDAH: atenção e impulsividade.</p>
+
+<h3>💡 Dicas para os pais</h3>
+<p>✔ Criar rotina diária</p>
+<p>✔ Evitar ambientes barulhentos</p>
+<p>✔ Ter paciência</p>
+<p>✔ Usar jogos educativos</p>
+<p>✔ Reforçar comportamentos positivos</p>
+
+<h3>😡 Como lidar com crises</h3>
+<p>✔ Falar com calma</p>
+<p>✔ Reduzir estímulos</p>
+<p>✔ Dar espaço</p>
+
+<button onclick="voltar()">⬅ Voltar</button>
+
+</div>
+
 <!-- VITÓRIA -->
-<div id="win" class="hidden">
+<div id="win">
 🎉 Parabéns!<br><br>
 <button onclick="fecharWin()">Continuar</button>
 </div>
@@ -123,8 +169,7 @@ input{
 
 // SOM AO ENTRAR
 window.onload = () => {
- document.getElementById("somEntrada").play();
- document.getElementById("win").classList.add("hidden");
+ document.getElementById("somEntrada").play().catch(()=>{});
 }
 
 // LOGIN
@@ -156,10 +201,16 @@ function logout(){
 // NAVEGAÇÃO
 function voltar(){
  memoria.classList.add("hidden");
+ info.classList.add("hidden");
  menu.classList.remove("hidden");
 }
 
-// MODO CALMO (AUTISMO)
+function abrirInfo(){
+ menu.classList.add("hidden");
+ info.classList.remove("hidden");
+}
+
+// MODO CALMO
 function modoCalmo(){
  document.body.classList.toggle("calmo");
 }
@@ -169,11 +220,9 @@ function abrirJogo(n){
  menu.classList.add("hidden");
  memoria.classList.remove("hidden");
 
- game.style.gridTemplateColumns = "repeat(4,1fr)";
-
- let emojis = ["🐶","🐱","🍎","🍌","🍇","🍉","🚗","⚽"];
- let usados = emojis.slice(0,n);
- let cards = [...usados,...usados].sort(()=>0.5-Math.random());
+ let emojis=["🐶","🐱","🍎","🍌","🍇","🍉","🚗","⚽"];
+ let usados=emojis.slice(0,n);
+ let cards=[...usados,...usados].sort(()=>0.5-Math.random());
 
  game.innerHTML="";
  score.innerText=0;
@@ -202,7 +251,7 @@ function abrirJogo(n){
 
      if(pontos===n*10){
       document.getElementById("somWin").play();
-      document.getElementById("win").classList.remove("hidden");
+      document.getElementById("win").style.display="flex";
      }
 
     }else{
@@ -219,9 +268,9 @@ function abrirJogo(n){
  });
 }
 
-// FECHAR
+// FECHAR VITÓRIA
 function fecharWin(){
- document.getElementById("win").classList.add("hidden");
+ document.getElementById("win").style.display="none";
  voltar();
 }
 
