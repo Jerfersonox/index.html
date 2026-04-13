@@ -10,55 +10,81 @@
 body{
  margin:0;
  font-family:Arial;
- text-align:center;
- background:linear-gradient(135deg,#667eea,#764ba2);
- color:white;
- transition:0.5s;
+ background:linear-gradient(135deg,#4facfe,#00f2fe);
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ height:100vh;
+ color:#333;
 }
 
-.container{
- padding:20px;
- max-width:500px;
- margin:auto;
+.box{
+ background:white;
+ padding:25px;
+ border-radius:20px;
+ width:90%;
+ max-width:400px;
+ box-shadow:0 10px 30px rgba(0,0,0,0.2);
+ text-align:center;
+ animation:fade 0.5s;
+}
+
+@keyframes fade{
+ from{opacity:0; transform:translateY(20px);}
+ to{opacity:1;}
+}
+
+h2{
+ margin-bottom:20px;
+}
+
+input{
+ width:100%;
+ padding:12px;
+ margin:8px 0;
+ border-radius:10px;
+ border:1px solid #ccc;
 }
 
 button{
- width:90%;
- padding:15px;
- margin:10px 0;
+ width:100%;
+ padding:12px;
+ margin-top:10px;
  border:none;
- border-radius:15px;
- font-size:18px;
+ border-radius:10px;
+ font-size:16px;
+ background:#4facfe;
+ color:white;
  font-weight:bold;
  cursor:pointer;
 }
 
-input{
- width:90%;
- padding:15px;
- margin:8px 0;
- border-radius:12px;
- border:none;
+button:hover{
+ background:#007bff;
 }
 
-/* MODO CALMO */
-.calmo{
- background:#a8dadc !important;
- color:#000;
+.hidden{display:none;}
+
+/* MENU */
+.menu button{
+ background:#00c853;
 }
 
 /* JOGO */
 #game{
  display:grid;
+ grid-template-columns:repeat(4,1fr);
  gap:10px;
+ margin-top:15px;
 }
 
 #game button{
- height:70px;
- font-size:22px;
+ height:60px;
+ font-size:20px;
+ background:#eee;
 }
 
-/* VITÓRIA */
+/* WIN */
 #win{
  position:fixed;
  top:0;
@@ -70,155 +96,113 @@ input{
  justify-content:center;
  align-items:center;
  flex-direction:column;
- font-size:26px;
+ color:white;
+ font-size:24px;
 }
-
-#win button{
- padding:15px 30px;
- border-radius:20px;
- border:none;
- font-size:20px;
-}
-
-.hidden{display:none;}
-
 </style>
 </head>
 
 <body>
 
-<audio id="somEntrada" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9bce58.mp3"></audio>
-<audio id="somWin" src="https://cdn.pixabay.com/audio/2022/03/10/audio_c5c8c0b6c2.mp3"></audio>
-
-<!-- LOGIN -->
-<div id="login" class="container">
+<div id="loginBox" class="box">
 <h2>🔐 Login</h2>
+
 <input id="user" placeholder="Usuário">
 <input id="pass" type="password" placeholder="Senha">
+
 <button onclick="login()">Entrar</button>
 <button onclick="cadastro()">Cadastrar</button>
+
 <p id="msg"></p>
 </div>
 
-<!-- MENU -->
-<div id="menu" class="container hidden">
+<div id="menuBox" class="box hidden menu">
 <h2>🧠 Mundo Inclusivo</h2>
 
-<button onclick="abrirJogo(4)">🟢 Jogo Fácil</button>
-<button onclick="abrirJogo(6)">🟡 Jogo Médio</button>
-<button onclick="abrirJogo(8)">🔴 Jogo Difícil</button>
+<button onclick="abrirJogo(4)">Fácil</button>
+<button onclick="abrirJogo(6)">Médio</button>
+<button onclick="abrirJogo(8)">Difícil</button>
 
-<button onclick="abrirInfo()">📘 Informações</button>
-<button onclick="modoCalmo()">🌿 Modo Calmo</button>
-
+<button onclick="abrirInfo()">Informações</button>
 <button onclick="logout()">Sair</button>
 </div>
 
-<!-- JOGO -->
-<div id="memoria" class="container hidden">
-<h2>🧩 Jogo da Memória</h2>
+<div id="jogoBox" class="box hidden">
+<h2>🧩 Memória</h2>
 <p>Pontos: <span id="score">0</span></p>
 <div id="game"></div>
-<button onclick="voltar()">⬅ Voltar</button>
+<button onclick="voltar()">Voltar</button>
 </div>
 
-<!-- INFORMAÇÕES -->
-<div id="info" class="container hidden">
+<div id="infoBox" class="box hidden">
+<h2>📘 Dicas</h2>
 
-<h2>📘 Autismo e TDAH</h2>
+<p><b>Autismo:</b> dificuldade social e comunicação.</p>
+<p><b>TDAH:</b> falta de atenção e impulsividade.</p>
 
-<h3>👶 Crianças (0 a 3 anos)</h3>
-<p>Pouco contato visual, atraso na fala, não responde ao nome.</p>
+<p><b>Crianças:</b> atraso na fala, agitação.</p>
+<p><b>Adultos:</b> dificuldade foco e organização.</p>
 
-<h3>🧒 Crianças (4 a 10 anos)</h3>
-<p>Dificuldade social, irritação, hiperatividade (TDAH), repetição de ações.</p>
-
-<h3>👦 Adolescentes</h3>
-<p>Dificuldade emocional, ansiedade, problemas de atenção.</p>
-
-<h3>👨 Adultos</h3>
-<p>Dificuldade em socializar, organização e foco.</p>
-
-<h3>⚠️ Diferença Autismo x TDAH</h3>
-<p>Autismo: comunicação e interação.</p>
-<p>TDAH: atenção e impulsividade.</p>
-
-<h3>💡 Dicas para os pais</h3>
-<p>✔ Criar rotina diária</p>
-<p>✔ Evitar ambientes barulhentos</p>
+<p><b>Dicas:</b></p>
+<p>✔ Criar rotina</p>
 <p>✔ Ter paciência</p>
-<p>✔ Usar jogos educativos</p>
-<p>✔ Reforçar comportamentos positivos</p>
+<p>✔ Evitar barulho</p>
 
-<h3>😡 Como lidar com crises</h3>
-<p>✔ Falar com calma</p>
-<p>✔ Reduzir estímulos</p>
-<p>✔ Dar espaço</p>
-
-<button onclick="voltar()">⬅ Voltar</button>
-
+<button onclick="voltar()">Voltar</button>
 </div>
 
-<!-- VITÓRIA -->
 <div id="win">
-🎉 Parabéns!<br><br>
+🎉 Parabéns!
 <button onclick="fecharWin()">Continuar</button>
 </div>
 
 <script>
 
-// SOM AO ENTRAR
-window.onload = () => {
- document.getElementById("somEntrada").play().catch(()=>{});
-}
-
-// LOGIN
+// CADASTRO
 function cadastro(){
  let u=user.value;
  let p=pass.value;
+
  if(u && p){
   localStorage.setItem("user_"+u,p);
   msg.innerText="Cadastrado!";
  }
 }
 
+// LOGIN CORRIGIDO
 function login(){
  let u=user.value;
  let p=pass.value;
 
  if(localStorage.getItem("user_"+u)===p){
-  login.classList.add("hidden");
-  menu.classList.remove("hidden");
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("menuBox").classList.remove("hidden");
  }else{
-  msg.innerText="Erro";
+  msg.innerText="Usuário ou senha errados";
  }
 }
 
+// LOGOUT
 function logout(){
  location.reload();
 }
 
 // NAVEGAÇÃO
 function voltar(){
- memoria.classList.add("hidden");
- info.classList.add("hidden");
- menu.classList.remove("hidden");
+ jogoBox.classList.add("hidden");
+ infoBox.classList.add("hidden");
+ menuBox.classList.remove("hidden");
 }
 
 function abrirInfo(){
- menu.classList.add("hidden");
- info.classList.remove("hidden");
-}
-
-// MODO CALMO
-function modoCalmo(){
- document.body.classList.toggle("calmo");
+ menuBox.classList.add("hidden");
+ infoBox.classList.remove("hidden");
 }
 
 // JOGO
 function abrirJogo(n){
- menu.classList.add("hidden");
- memoria.classList.remove("hidden");
+ menuBox.classList.add("hidden");
+ jogoBox.classList.remove("hidden");
 
  let emojis=["🐶","🐱","🍎","🍌","🍇","🍉","🚗","⚽"];
  let usados=emojis.slice(0,n);
@@ -250,7 +234,6 @@ function abrirJogo(n){
      first=null; second=null; lock=false;
 
      if(pontos===n*10){
-      document.getElementById("somWin").play();
       document.getElementById("win").style.display="flex";
      }
 
@@ -259,7 +242,7 @@ function abrirJogo(n){
       first.innerText="?";
       second.innerText="?";
       first=null; second=null; lock=false;
-     },800);
+     },700);
     }
    }
   };
@@ -268,7 +251,7 @@ function abrirJogo(n){
  });
 }
 
-// FECHAR VITÓRIA
+// FECHAR WIN
 function fecharWin(){
  document.getElementById("win").style.display="none";
  voltar();
